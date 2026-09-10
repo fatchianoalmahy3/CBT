@@ -1,0 +1,74 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default deny all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // Products collection
+    match /products/{productId} {
+      allow read: if true;
+      allow create: if isValidId(productId)
+        && incoming().name is string && incoming().name.size() > 0 && incoming().name.size() <= 200
+        && incoming().price is number && incoming().price >= 0
+        && incoming().category is string && incoming().category.size() <= 100;
+      allow update: if isValidId(productId)
+        && (incoming().name is string && incoming().name.size() > 0 && incoming().name.size() <= 200)
+        && (incoming().price is number && incoming().price >= 0)
+        && (incoming().category is string && incoming().category.size() <= 100);
+      allow delete: if isValidId(productId);
+    }
+
+    // Employees collection
+    match /employees/{employeeId} {
+      allow read: if true;
+      allow create: if isValidId(employeeId)
+        && incoming().name is string && incoming().name.size() > 0 && incoming().name.size() <= 150
+        && incoming().role_title is string && incoming().role_title.size() <= 150
+        && incoming().department is string && incoming().department.size() <= 100;
+      allow update: if isValidId(employeeId)
+        && (incoming().name is string && incoming().name.size() > 0 && incoming().name.size() <= 150)
+        && (incoming().role_title is string && incoming().role_title.size() <= 150)
+        && (incoming().department is string && incoming().department.size() <= 100);
+      allow delete: if isValidId(employeeId);
+    }
+
+    // Orders collection
+    match /orders/{orderId} {
+      allow read: if true;
+      allow create: if isValidId(orderId)
+        && incoming().customer_name is string && incoming().customer_name.size() > 0 && incoming().customer_name.size() <= 150
+        && incoming().invoice_number is string && incoming().invoice_number.size() <= 100
+        && incoming().total_amount is number && incoming().total_amount >= 0;
+      allow update: if isValidId(orderId)
+        && (incoming().customer_name is string && incoming().customer_name.size() > 0 && incoming().customer_name.size() <= 150)
+        && (incoming().invoice_number is string && incoming().invoice_number.size() <= 100)
+        && (incoming().total_amount is number && incoming().total_amount >= 0);
+      allow delete: if isValidId(orderId);
+    }
+
+    // Audit logs collection
+    match /audit_logs/{logId} {
+      allow read: if true;
+      allow create: if isValidId(logId)
+        && incoming().action is string && incoming().action.size() <= 150
+        && incoming().user is string && incoming().user.size() <= 100;
+      allow update: if false; // Logs are immutable
+      allow delete: if isValidId(logId);
+    }
+  }
+}

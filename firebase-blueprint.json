@@ -1,0 +1,174 @@
+{
+  "entities": {
+    "Product": {
+      "title": "Product",
+      "description": "Katalog produk dan inventaris barang perusahaan",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Nama produk lengkap",
+          "maxLength": 200
+        },
+        "price": {
+          "type": "number",
+          "description": "Harga satuan dalam Rupiah"
+        },
+        "category": {
+          "type": "string",
+          "description": "Kategori produk",
+          "maxLength": 100
+        },
+        "description": {
+          "type": "string",
+          "description": "Deskripsi atau spesifikasi produk (HTML/RichText)",
+          "maxLength": 20000
+        },
+        "image_url": {
+          "type": "string",
+          "description": "URL gambar produk dari Firebase Storage atau tautan media",
+          "maxLength": 5000
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Waktu pembuatan record"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Waktu pembaruan terakhir"
+        }
+      },
+      "required": ["name", "price", "category"]
+    },
+    "Employee": {
+      "title": "Employee",
+      "description": "Data direktori karyawan dan lokasi penugasan",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Nama lengkap karyawan",
+          "maxLength": 150
+        },
+        "role_title": {
+          "type": "string",
+          "description": "Jabatan atau posisi pekerjaan",
+          "maxLength": 150
+        },
+        "department": {
+          "type": "string",
+          "description": "Departemen kerja",
+          "maxLength": 100
+        },
+        "cv_url": {
+          "type": "string",
+          "description": "URL berkas CV / resume di Firebase Storage",
+          "maxLength": 5000
+        },
+        "office_location": {
+          "type": "object",
+          "description": "Titik koordinat penugasan GPS & nama kantor"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Waktu pembuatan record"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Waktu pembaruan terakhir"
+        }
+      },
+      "required": ["name", "role_title", "department"]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "Transaksi penjualan dan faktur pesanan",
+      "type": "object",
+      "properties": {
+        "customer_name": {
+          "type": "string",
+          "description": "Nama klien atau entitas pemesan",
+          "maxLength": 150
+        },
+        "invoice_number": {
+          "type": "string",
+          "description": "Nomor faktur invoice",
+          "maxLength": 100
+        },
+        "total_amount": {
+          "type": "number",
+          "description": "Total tagihan dalam Rupiah"
+        },
+        "payment_status": {
+          "type": "string",
+          "description": "Status pembayaran pesanan",
+          "enum": ["Lunas", "Menunggu Pembayaran", "Dibatalkan"]
+        },
+        "invoice_notes": {
+          "type": "string",
+          "description": "Catatan faktur dan rincian transaksi",
+          "maxLength": 20000
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Waktu pembuatan record"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Waktu pembaruan terakhir"
+        }
+      },
+      "required": ["customer_name", "invoice_number", "total_amount", "payment_status"]
+    },
+    "AuditLog": {
+      "title": "AuditLog",
+      "description": "Rekam jejak aktivitas dan riwayat perubahan data sistem",
+      "type": "object",
+      "properties": {
+        "action": {
+          "type": "string",
+          "description": "Jenis tindakan atau aksi sistem",
+          "maxLength": 150
+        },
+        "user": {
+          "type": "string",
+          "description": "Pelaku tindakan atau peran pengguna",
+          "maxLength": 100
+        },
+        "timestamp": {
+          "type": "string",
+          "description": "Waktu kejadian tercatat",
+          "maxLength": 100
+        },
+        "details": {
+          "type": "string",
+          "description": "Rincian aksi aktivitas",
+          "maxLength": 10000
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Waktu pembuatan record"
+        }
+      },
+      "required": ["action", "user", "timestamp", "details"]
+    }
+  },
+  "firestore": {
+    "/products/{productId}": {
+      "schema": "Product",
+      "description": "Koleksi data produk dan inventaris"
+    },
+    "/employees/{employeeId}": {
+      "schema": "Employee",
+      "description": "Koleksi data karyawan dan penugasan lokasi"
+    },
+    "/orders/{orderId}": {
+      "schema": "Order",
+      "description": "Koleksi transaksi pesanan dan status invoice"
+    },
+    "/audit_logs/{logId}": {
+      "schema": "AuditLog",
+      "description": "Koleksi log audit aktivitas sistem"
+    }
+  }
+}

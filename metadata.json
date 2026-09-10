@@ -1,0 +1,6 @@
+{
+  "name": "Low-Code Admin Starter Kit",
+  "description": "An optimal, DRY, and schema-driven Admin Starter Kit integrated with Cloud Firestore and Firebase Storage.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
